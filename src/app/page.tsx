@@ -46,6 +46,10 @@ export default function Home() {
       const data = await response.json().catch(() => null);
       if (data && data.token) {
         window.localStorage.setItem("grantiq_token", data.token);
+        const userLabel = identifier.includes("@")
+          ? identifier.split("@")[0]
+          : identifier;
+        window.localStorage.setItem("grantiq_user_label", userLabel);
       }
 
       router.push("/dashboard/application-validation");

@@ -8,6 +8,29 @@ type ApiApplication = {
   id: number;
   application_id: string;
   full_name: string | null;
+  father_name: string | null;
+  mother_name: string | null;
+  marital_status: string | null;
+  gender: string | null;
+  mother_tongue: string | null;
+  dob_year: number | null;
+  dob_month: number | null;
+  dob_day: number | null;
+  aadhaar_number: string | null;
+  aadhaar_verified: boolean;
+  pan_number: string | null;
+  pan_verified: boolean;
+  tribe: string | null;
+  st_certificate_number: string | null;
+  certificate_issue_date: string | null;
+  caste_validity_cert_number: string | null;
+  caste_validity_issue_date: string | null;
+  address: string | null;
+  city: string | null;
+  state: string | null;
+  pincode: string | null;
+  phone: string | null;
+  email: string | null;
   application_status: ApiApplicationStatus;
   current_step: number;
   submitted_at: string | null;
@@ -67,6 +90,11 @@ export default function ApplicationValidationPage() {
   );
   const [searchQuery, setSearchQuery] = useState("");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [selectedApplication, setSelectedApplication] =
+    useState<ApiApplication | null>(null);
+  const [isViewDocsLoading, setIsViewDocsLoading] = useState(false);
+  const [viewDocsError, setViewDocsError] = useState<string | null>(null);
+  const [selectedDocType, setSelectedDocType] = useState<string>("form16");
 
   useEffect(() => {
     async function loadApplications() {
@@ -80,7 +108,7 @@ export default function ApplicationValidationPage() {
             : null;
 
         const response = await fetch(
-          `${API_BASE_URL}/api/grantor/applications`,
+          `${API_BASE_URL}/api/grantor/applications/all`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -222,7 +250,7 @@ export default function ApplicationValidationPage() {
           </div>
         </div>
 
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto overflow-y-auto max-h-[60vh]">
           {error ? (
             <div className="px-5 py-6 text-sm text-rose-200">
               {error}
@@ -256,6 +284,7 @@ export default function ApplicationValidationPage() {
                       </span>
                     </button>
                   </th>
+                  <th className="px-5 py-3 font-medium text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -289,6 +318,15 @@ export default function ApplicationValidationPage() {
                         ? formatDate(application.submitted_at)
                         : "Not submitted"}
                     </td>
+                    <td className="px-5 py-3 text-right">
+                      <button
+                        type="button"
+                        onClick={() => setSelectedApplication(application)}
+                        className="inline-flex items-center rounded-full bg-slate-900/70 border border-slate-600/80 px-3 py-1.5 text-[11px] font-medium text-slate-100 hover:bg-slate-800/90"
+                      >
+                        View
+                      </button>
+                    </td>
                   </tr>
                 ))}
               </tbody>
@@ -296,6 +334,326 @@ export default function ApplicationValidationPage() {
           )}
         </div>
       </div>
+
+      {selectedApplication && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm px-4">
+          <div className="w-full max-w-4xl rounded-3xl bg-slate-950 border border-white/10 shadow-2xl shadow-purple-900/50 overflow-hidden">
+            <div className="px-6 py-4 border-b border-white/10 flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs uppercase tracking-[0.25em] text-slate-400 mb-1">
+                  Application Overview
+                </p>
+                <h2 className="text-lg font-semibold text-white">
+                  {selectedApplication.full_name || "Unnamed Applicant"}
+                </h2>
+                <p className="text-xs text-slate-300 mt-1">
+                  ID:{" "}
+                  <span className="font-mono">
+                    {selectedApplication.application_id}
+                  </span>
+                  {" · "}
+                  Step {selectedApplication.current_step} · Status:{" "}
+                  <span className="capitalize">
+                    {selectedApplication.application_status}
+                  </span>
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setSelectedApplication(null)}
+                className="text-slate-300 hover:text-white text-sm px-2 py-1 rounded-lg hover:bg-slate-900/80"
+              >
+                ✕
+              </button>
+            </div>
+
+            <div className="px-6 py-5 grid grid-cols-1 md:grid-cols-2 gap-5 max-h-[70vh] overflow-y-auto">
+              <section className="space-y-3">
+                <h3 className="text-sm font-semibold text-white">
+                  Identity Details
+                </h3>
+                <div className="space-y-2 text-xs text-slate-200">
+                  <div className="flex justify-between gap-4">
+                    <span className="text-slate-400">Full Name</span>
+                    <span className="font-medium text-right">
+                      {selectedApplication.full_name || "—"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-slate-400">Aadhaar Number</span>
+                    <span className="font-medium text-right">
+                      {selectedApplication.aadhaar_number || "—"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-slate-400">PAN Number</span>
+                    <span className="font-medium text-right">
+                      {selectedApplication.pan_number || "—"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-slate-400">Date of Birth</span>
+                    <span className="font-medium text-right">
+                      {selectedApplication.dob_year &&
+                      selectedApplication.dob_month &&
+                      selectedApplication.dob_day
+                        ? `${selectedApplication.dob_day}/${selectedApplication.dob_month}/${selectedApplication.dob_year}`
+                        : "—"}
+                    </span>
+                  </div>
+                </div>
+              </section>
+
+              <section className="space-y-3">
+                <h3 className="text-sm font-semibold text-white">
+                  Personal Details
+                </h3>
+                <div className="space-y-2 text-xs text-slate-200">
+                  <div className="flex justify-between gap-4">
+                    <span className="text-slate-400">Father&apos;s Name</span>
+                    <span className="font-medium text-right">
+                      {selectedApplication.father_name || "—"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-slate-400">Mother&apos;s Name</span>
+                    <span className="font-medium text-right">
+                      {selectedApplication.mother_name || "—"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-slate-400">Gender</span>
+                    <span className="font-medium text-right capitalize">
+                      {selectedApplication.gender || "—"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-slate-400">Marital Status</span>
+                    <span className="font-medium text-right capitalize">
+                      {selectedApplication.marital_status || "—"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-slate-400">Mother Tongue</span>
+                    <span className="font-medium text-right">
+                      {selectedApplication.mother_tongue || "—"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-slate-400">Phone</span>
+                    <span className="font-medium text-right">
+                      {selectedApplication.phone || "—"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-slate-400">Email</span>
+                    <span className="font-medium text-right">
+                      {selectedApplication.email || "—"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-slate-400">Address</span>
+                    <span className="font-medium text-right">
+                      {selectedApplication.address ||
+                      selectedApplication.city ||
+                      selectedApplication.state ||
+                      selectedApplication.pincode
+                        ? [
+                            selectedApplication.address,
+                            selectedApplication.city,
+                            selectedApplication.state,
+                            selectedApplication.pincode,
+                          ]
+                            .filter(Boolean)
+                            .join(", ")
+                        : "—"}
+                    </span>
+                  </div>
+                </div>
+              </section>
+
+              <section className="space-y-3">
+                <div className="flex items-center justify-between gap-3">
+                  <h3 className="text-sm font-semibold text-white">
+                    Document Details
+                  </h3>
+                  <div className="flex items-center gap-2">
+                    <select
+                      value={selectedDocType}
+                      onChange={(e) => setSelectedDocType(e.target.value)}
+                      className="rounded-full bg-slate-900/70 border border-slate-700/80 px-3 py-1.5 text-[11px] text-slate-100 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                    >
+                      <option value="form16">Form 16</option>
+                      <option value="caste_certificate">Caste Certificate</option>
+                      <option value="marksheet_10th">10th Marksheet</option>
+                      <option value="marksheet_12th">12th Marksheet</option>
+                      <option value="marksheet_graduation">
+                        Graduation Marksheet
+                      </option>
+                    </select>
+                    <button
+                      type="button"
+                      disabled={isViewDocsLoading || !selectedDocType}
+                      onClick={async () => {
+                        if (!selectedApplication || !selectedDocType) return;
+                        setViewDocsError(null);
+                        setIsViewDocsLoading(true);
+                        try {
+                          const token =
+                            typeof window !== "undefined"
+                              ? window.localStorage.getItem("grantiq_token")
+                              : null;
+
+                          const response = await fetch(
+                            `${API_BASE_URL}/api/grantor/applications/view-documents`,
+                            {
+                              method: "POST",
+                              headers: {
+                                "Content-Type": "application/json",
+                                ...(token ? { Authorization: `Bearer ${token}` } : {}),
+                              },
+                              body: JSON.stringify({
+                                application_id: selectedApplication.application_id,
+                                type: selectedDocType,
+                              }),
+                            },
+                          );
+
+                          const rawError = await (async () => {
+                            if (response.ok) return null;
+                            const json = (await response
+                              .json()
+                              .catch(() => ({}))) as {
+                              message?: string;
+                              detail?: string;
+                            };
+
+                            if (response.status === 404 && json.detail) {
+                              return json.detail;
+                            }
+
+                            return (
+                              json.message ||
+                              json.detail ||
+                              "Unable to fetch documents. Please try again."
+                            );
+                          })();
+
+                          if (rawError) {
+                            throw new Error(rawError);
+                          }
+
+                          const data = (await response.json().catch(() => ({}))) as {
+                            url?: string;
+                            presigned_url?: string;
+                            data?: { url?: string; presigned_url?: string };
+                          };
+
+                          const url =
+                            data.presigned_url ||
+                            data.url ||
+                            data.data?.presigned_url ||
+                            data.data?.url;
+
+                          if (!url) {
+                            throw new Error("Document URL not available.");
+                          }
+
+                          if (typeof window !== "undefined") {
+                            window.open(url, "_blank", "noopener,noreferrer");
+                          }
+                        } catch (err) {
+                          const message =
+                            err instanceof Error
+                              ? err.message
+                              : "Something went wrong while opening documents.";
+                          setViewDocsError(message);
+                        } finally {
+                          setIsViewDocsLoading(false);
+                        }
+                      }}
+                      className="inline-flex items-center rounded-full bg-slate-900/70 border border-slate-600/80 px-3 py-1.5 text-[11px] font-medium text-slate-100 hover:bg-slate-800/90 disabled:opacity-60 disabled:cursor-not-allowed"
+                    >
+                      {isViewDocsLoading ? "Opening..." : "View Documents"}
+                    </button>
+                  </div>
+                </div>
+
+                {viewDocsError && (
+                  <p className="text-[11px] text-rose-300 bg-rose-950/40 border border-rose-500/40 rounded-xl px-3 py-2">
+                    {viewDocsError}
+                  </p>
+                )}
+
+                <div className="space-y-2 text-xs text-slate-200">
+                  <div className="flex justify-between gap-4">
+                    <span className="text-slate-400">Tribe</span>
+                    <span className="font-medium text-right">
+                      {selectedApplication.tribe || "—"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-slate-400">ST Certificate No.</span>
+                    <span className="font-medium text-right">
+                      {selectedApplication.st_certificate_number || "—"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-slate-400">ST Certificate Issue</span>
+                    <span className="font-medium text-right">
+                      {selectedApplication.certificate_issue_date
+                        ? formatDate(selectedApplication.certificate_issue_date)
+                        : "—"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-slate-400">
+                      Caste Validity Cert No.
+                    </span>
+                    <span className="font-medium text-right">
+                      {selectedApplication.caste_validity_cert_number || "—"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-slate-400">
+                      Caste Validity Issue
+                    </span>
+                    <span className="font-medium text-right">
+                      {selectedApplication.caste_validity_issue_date
+                        ? formatDate(
+                            selectedApplication.caste_validity_issue_date,
+                          )
+                        : "—"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-slate-400">Aadhaar Verified</span>
+                    <span className="font-medium text-right">
+                      {selectedApplication.aadhaar_verified ? "Yes" : "No"}
+                    </span>
+                  </div>
+                  <div className="flex justify-between gap-4">
+                    <span className="text-slate-400">PAN Verified</span>
+                    <span className="font-medium text-right">
+                      {selectedApplication.pan_verified ? "Yes" : "No"}
+                    </span>
+                  </div>
+                </div>
+              </section>
+
+              <section className="space-y-3">
+                <h3 className="text-sm font-semibold text-white">
+                  University Details
+                </h3>
+                <p className="text-xs text-slate-300">
+                  University and course details will appear here once the
+                  applicant completes the academic section of the application.
+                </p>
+              </section>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

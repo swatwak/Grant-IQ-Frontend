@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 type DashboardLayoutProps = {
   children: ReactNode;
@@ -28,6 +28,21 @@ const navItems = [
 export default function DashboardLayout({ children }: DashboardLayoutProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [displayName, setDisplayName] = useState("Grantor");
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const stored =
+      window.localStorage.getItem("grantiq_user_label") ||
+      window.localStorage.getItem("grantiq_email");
+    if (stored && stored.trim().length > 0) {
+      const label = stored.includes("@")
+        ? stored.split("@")[0]
+        : stored;
+      setDisplayName(label);
+    }
+  }, []);
 
   function handleLogout() {
     window.localStorage.removeItem("grantiq_token");
@@ -49,17 +64,31 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
         </div>
 
-        <div className="flex items-center gap-4">
-          <div className="hidden md:flex flex-col items-end">
-            <span className="text-xs text-violet-100/90">Signed in as</span>
-            <span className="text-sm font-medium text-white">Grantor</span>
-          </div>
+        <div className="relative flex items-center gap-4">
           <button
-            onClick={handleLogout}
-            className="text-xs font-medium text-pink-200 hover:text-white border border-pink-400/70 rounded-full px-3 py-1 bg-pink-500/10"
+            type="button"
+            onClick={() => setIsUserMenuOpen((open) => !open)}
+            className="flex items-center gap-2 rounded-full bg-gradient-to-r from-[#fb7185] to-[#f97316] px-4 py-1.5 shadow-lg shadow-pink-500/30 text-white text-xs font-medium"
           >
-            Logout
+            <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/15">
+              {/* simple person icon */}
+              <span className="text-[13px]">👤</span>
+            </span>
+            <span className="hidden sm:inline">{displayName}</span>
+            <span className="text-[11px]">▾</span>
           </button>
+
+          {isUserMenuOpen && (
+            <div className="absolute right-0 top-11 w-40 rounded-2xl bg-slate-950 border border-slate-700/80 shadow-xl shadow-slate-900/70 py-1 text-xs text-slate-100">
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="w-full text-left px-4 py-2 hover:bg-slate-900/80 rounded-2xl"
+              >
+                Logout
+              </button>
+            </div>
+          )}
         </div>
       </header>
 
