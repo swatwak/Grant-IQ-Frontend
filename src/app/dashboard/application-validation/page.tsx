@@ -179,10 +179,10 @@ export default function ApplicationValidationPage() {
     <div className="max-w-6xl mx-auto space-y-6">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-semibold text-white">
+          <h1 className="text-2xl md:text-3xl font-semibold text-slate-900">
             Application Validation
           </h1>
-          <p className="text-sm text-violet-100/80 mt-1 max-w-xl">
+          <p className="text-sm text-slate-700 mt-1 max-w-xl">
             Review and validate incoming scholarship applications before moving
             them to scrutiny and recommendation stages.
           </p>
@@ -336,24 +336,24 @@ export default function ApplicationValidationPage() {
       </div>
 
       {selectedApplication && (
-        <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-950/70 backdrop-blur-sm px-4">
-          <div className="w-full max-w-4xl rounded-3xl bg-slate-950 border border-white/10 shadow-2xl shadow-purple-900/50 overflow-hidden">
-            <div className="px-6 py-4 border-b border-white/10 flex items-start justify-between gap-4">
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-slate-900/50 backdrop-blur-sm px-4">
+          <div className="w-full max-w-5xl rounded-3xl bg-white border border-slate-200 shadow-2xl shadow-slate-900/30 overflow-hidden">
+            <div className="px-6 py-4 border-b border-slate-200 flex items-start justify-between gap-4 bg-gradient-to-r from-[#349FC9] via-[#60a5fa] to-[#e0f2fe]">
               <div>
-                <p className="text-xs uppercase tracking-[0.25em] text-slate-400 mb-1">
+                <p className="text-xs uppercase tracking-[0.25em] text-sky-100/90 mb-1">
                   Application Overview
                 </p>
                 <h2 className="text-lg font-semibold text-white">
                   {selectedApplication.full_name || "Unnamed Applicant"}
                 </h2>
-                <p className="text-xs text-slate-300 mt-1">
+                <p className="text-xs text-sky-100/90 mt-1">
                   ID:{" "}
                   <span className="font-mono">
                     {selectedApplication.application_id}
                   </span>
                   {" · "}
                   Step {selectedApplication.current_step} · Status:{" "}
-                  <span className="capitalize">
+                  <span className="capitalize font-medium">
                     {selectedApplication.application_status}
                   </span>
                 </p>
@@ -361,18 +361,18 @@ export default function ApplicationValidationPage() {
               <button
                 type="button"
                 onClick={() => setSelectedApplication(null)}
-                className="text-slate-300 hover:text-white text-sm px-2 py-1 rounded-lg hover:bg-slate-900/80"
+                className="text-black hover:text-black-500 text-sm px-2 py-1 rounded-lg bg-black/50 hover:bg-black/10"
               >
                 ✕
               </button>
             </div>
 
-            <div className="px-6 py-5 grid grid-cols-1 md:grid-cols-2 gap-5 max-h-[70vh] overflow-y-auto">
+            <div className="px-6 py-5 grid grid-cols-1 md:grid-cols-2 gap-5 max-h-[70vh] overflow-y-auto bg-slate-50">
               <section className="space-y-3">
-                <h3 className="text-sm font-semibold text-white">
+                <h3 className="text-sm font-semibold text-slate-900">
                   Identity Details
                 </h3>
-                <div className="space-y-2 text-xs text-slate-200">
+                <div className="space-y-2 text-xs text-slate-700">
                   <div className="flex justify-between gap-4">
                     <span className="text-slate-400">Full Name</span>
                     <span className="font-medium text-right">
@@ -405,10 +405,10 @@ export default function ApplicationValidationPage() {
               </section>
 
               <section className="space-y-3">
-                <h3 className="text-sm font-semibold text-white">
+                <h3 className="text-sm font-semibold text-slate-900">
                   Personal Details
                 </h3>
-                <div className="space-y-2 text-xs text-slate-200">
+                <div className="space-y-2 text-xs text-slate-700">
                   <div className="flex justify-between gap-4">
                     <span className="text-slate-400">Father&apos;s Name</span>
                     <span className="font-medium text-right">
@@ -474,14 +474,14 @@ export default function ApplicationValidationPage() {
 
               <section className="space-y-3">
                 <div className="flex items-center justify-between gap-3">
-                  <h3 className="text-sm font-semibold text-white">
+                  <h3 className="text-sm font-semibold text-slate-900">
                     Document Details
                   </h3>
                   <div className="flex items-center gap-2">
                     <select
                       value={selectedDocType}
                       onChange={(e) => setSelectedDocType(e.target.value)}
-                      className="rounded-full bg-slate-900/70 border border-slate-700/80 px-3 py-1.5 text-[11px] text-slate-100 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent"
+                      className="rounded-full bg-white border border-slate-300 px-3 py-1.5 text-[11px] text-slate-700 focus:outline-none focus:ring-2 focus:ring-sky-400 focus:border-transparent"
                     >
                       <option value="form16">Form 16</option>
                       <option value="caste_certificate">Caste Certificate</option>
@@ -572,7 +572,7 @@ export default function ApplicationValidationPage() {
                           setIsViewDocsLoading(false);
                         }
                       }}
-                      className="inline-flex items-center rounded-full bg-slate-900/70 border border-slate-600/80 px-3 py-1.5 text-[11px] font-medium text-slate-100 hover:bg-slate-800/90 disabled:opacity-60 disabled:cursor-not-allowed"
+                      className="inline-flex items-center rounded-full bg-sky-600 border border-sky-500 px-3 py-1.5 text-[11px] font-medium text-white hover:bg-sky-700 disabled:opacity-60 disabled:cursor-not-allowed"
                     >
                       {isViewDocsLoading ? "Opening..." : "View Documents"}
                     </button>
@@ -580,12 +580,12 @@ export default function ApplicationValidationPage() {
                 </div>
 
                 {viewDocsError && (
-                  <p className="text-[11px] text-rose-300 bg-rose-950/40 border border-rose-500/40 rounded-xl px-3 py-2">
+                  <p className="text-[11px] text-rose-700 bg-rose-50 border border-rose-200 rounded-xl px-3 py-2">
                     {viewDocsError}
                   </p>
                 )}
 
-                <div className="space-y-2 text-xs text-slate-200">
+                <div className="space-y-2 text-xs text-slate-700">
                   <div className="flex justify-between gap-4">
                     <span className="text-slate-400">Tribe</span>
                     <span className="font-medium text-right">
@@ -642,10 +642,10 @@ export default function ApplicationValidationPage() {
               </section>
 
               <section className="space-y-3">
-                <h3 className="text-sm font-semibold text-white">
+                <h3 className="text-sm font-semibold text-slate-900">
                   University Details
                 </h3>
-                <p className="text-xs text-slate-300">
+                <p className="text-xs text-slate-700">
                   University and course details will appear here once the
                   applicant completes the academic section of the application.
                 </p>

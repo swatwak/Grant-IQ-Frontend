@@ -50,7 +50,7 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#3b0764] via-[#6d28d9] to-[#020617] flex flex-col">
+    <div className="min-h-screen bg-gradient-to-br from-[#349FC9] via-[#e5e7eb] to-[#e0f2fe] flex flex-col">
       <header className="h-16 border-b border-white/10 bg-slate-950/40 backdrop-blur-xl px-6 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="h-9 w-9 rounded-2xl bg-gradient-to-tr from-[#fb7185] to-[#f97316] flex items-center justify-center shadow-lg shadow-pink-500/40">
@@ -131,15 +131,15 @@ export default function DashboardLayout({ children }: DashboardLayoutProps) {
             })}
           </nav>
 
-          <div className="px-4 py-4 border-t border-white/10 text-xs text-slate-300">
-            <p className="font-medium text-slate-100 mb-1">
-              Workflow Summary
-            </p>
-            <p>
-              Start with <span className="font-semibold">Application Validation</span>, then
-              move candidates through <span className="font-semibold">Scrutiny</span> and{" "}
-              <span className="font-semibold">Recommendation</span>.
-            </p>
+          <div className="px-4 py-4 border-t border-white/10 text-xs text-slate-300 flex items-center justify-between">
+            <span className="text-slate-400">Manage GrantIQ engine settings</span>
+            <button
+              type="button"
+              onClick={() => router.push("/dashboard/engine-rules")}
+              className="inline-flex items-center rounded-full bg-slate-900/80 border border-slate-600/80 px-3 py-1.5 text-[11px] font-medium text-slate-100 hover:bg-slate-800/90"
+            >
+              Config
+            </button>
           </div>
         </aside>
 

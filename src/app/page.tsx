@@ -63,30 +63,30 @@ export default function Home() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#3b0764] via-[#6d28d9] to-[#020617] flex items-center justify-center px-4 py-10">
+    <div className="min-h-screen bg-gradient-to-br from-[#349FC9] via-[#e5e7eb] to-[#e0f2fe] flex items-center justify-center px-4 py-10">
       <div className="max-w-6xl w-full flex flex-col lg:flex-row items-center gap-16">
-        <div className="flex-1 text-center lg:text-left text-white">
+        <div className="flex-1 text-center lg:text-left text-slate-900">
           <div className="inline-flex items-center gap-3 mb-6">
             <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-[#fb7185] to-[#f97316] flex items-center justify-center shadow-lg shadow-pink-500/40">
               <span className="text-2xl font-semibold">IQ</span>
             </div>
             <div>
-              <p className="text-sm uppercase tracking-[0.2em] text-pink-200/80">
+              <p className="text-sm uppercase tracking-[0.2em] text-pink-500/80">
                 GrantIQ
               </p>
-              <p className="text-base font-medium text-pink-100">
+              <p className="text-base font-semibold text-pink-600">
                 Smart Scholarship Management for Grantors
               </p>
             </div>
           </div>
-          <h1 className="text-4xl md:text-5xl font-semibold leading-tight mb-4">
+          <h1 className="text-4xl md:text-5xl font-semibold leading-tight mb-4 text-slate-900">
             Welcome Back,
             <br />
-            <span className="text-pink-300">Grantor</span>
+            <span className="text-pink-600">Grantor</span>
           </h1>
-          <p className="text-base md:text-lg text-violet-100/80 max-w-xl">
+          <p className="text-base md:text-lg text-slate-700 max-w-xl">
             Sign in to validate, scrutinize, and recommend scholarship applications
-            with a streamlined workflow designed for scholarship committees.
+            with a streamlined workflow.
           </p>
         </div>
 
@@ -152,7 +152,7 @@ export default function Home() {
               {" "}
               <Link
                 href="/register"
-                className="font-medium text-pink-300 hover:text-pink-200 underline underline-offset-4"
+                className="font-medium text-blue-700 hover:text-pink-200 underline underline-offset-4"
               >
                 Register
               </Link>
